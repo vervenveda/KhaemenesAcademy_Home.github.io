@@ -1,55 +1,29 @@
 # Khaemenes Academy
 
-**A Sanctuary for Lifelong Learners**
+*A Sanctuary for Lifelong Learners*
 
-Welcome to the official public front desk of **Khaemenes Academy**, a free educational community within the Verve N Veda network.
+Welcome to the public entrance of **Khaemenes Academy**, part of the Verve N Veda educational community.
 
-This repository contains the Academy's public-facing landing page. It helps students, families, teachers, and independent adult learners discover the right educational doorway.
+We believe learning should be accessible, engaging, and available throughout life.
 
-## Open the Academy
+## Explore the Academy
 
-- [Academy home](https://vervenveda.com/KhaemenesAcademy_Home.github.io/) — the public landing-page destination, once GitHub Pages is enabled and deployment verified.
-- [Verve N Veda](https://vervenveda.com/) — the wider educational and creative network.
+- [Enter Khaemenes Academy](https://vervenveda.com/KhaemenesAcademy_Home.github.io/)
+- [Visit Verve N Veda](https://vervenveda.com/)
 
-## What the public page provides
+Discover learning opportunities for early childhood, elementary and middle school, high school, adult education, and lifelong exploration. Visitors can find pathways for students, families, and educators, along with creative and educational resources.
 
-- Student, family, teacher, and adult-learning entry points.
-- Directions to Pre-K, Kindergarten, Elementary, Middle School, High School, and Higher Learning.
-- Links to learning resources, orientation, public support, and beta feedback.
-- Public information about the Academy's free-access educational mission.
+## Our commitment
 
-Student progress and private account information are **not** stored in this public repository. The homepage must not claim cloud synchronization unless an authenticated service has independently verified it.
+Khaemenes Academy supports curiosity, critical thinking, creativity, learning independence, and respectful community participation. We aim to provide educational opportunities without charging for access.
 
-## Repository scope
+We value student wellbeing, privacy, accessibility, and clear communication. Please do not share private account or student information in public repository discussions.
 
-The intended public repository is intentionally small:
+## Security and accessibility
 
-```text
-KhaemenesAcademy_Home.github.io/
-├── index.html
-└── README.md
-```
+To report a security concern, read our [public security policy](SECURITY.md). Please share any sensitive details privately, not in a public issue.
 
-The public homepage should use publicly accessible, approved destinations for every link, stylesheet, and script. A public browser cannot load protected content directly from a private GitHub repository. Publishing a website from a private source repository, where supported by the GitHub plan, does **not** make the published website private.
-
-The Academy's other educational campuses and tools may be maintained in separate repositories and reached through their public websites.
-
-## Publishing and continuity
-
-The landing page is published using GitHub Pages once Pages is enabled in this repository's settings. The public page should be tested before changing the visibility or publishing configuration of any other repository.
-
-To preserve access during a source-repository transition:
-
-1. Verify that the new landing page is actually deployed and its links work.
-2. Ensure its external scripts, images, and destinations remain available from approved public hosts.
-3. Confirm that any existing Academy web routes and bookmarks continue to work, or provide stable public redirects.
-4. Keep private credentials, administrative interfaces, student information, and non-public implementation details out of public HTML and browser-delivered assets.
-
-**A public landing page is a directory, not an authentication or privacy boundary.**
-
-## Educational mission
-
-Khaemenes Academy promotes curiosity, literacy, creativity, critical thinking, practical skills, and lifelong learning. Educational resources are designed to remain freely discoverable across the Academy's connected campuses.
+Accessibility and educational-content feedback are welcome through appropriate public project channels.
 
 ## Copyright
 
