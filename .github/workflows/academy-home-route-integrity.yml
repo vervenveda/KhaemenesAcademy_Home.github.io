@@ -1,0 +1,29 @@
+name: Academy Home Route Integrity
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'tests/academy-home-route-integrity.test.mjs'
+      - '.github/workflows/academy-home-route-integrity.yml'
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'tests/academy-home-route-integrity.test.mjs'
+      - '.github/workflows/academy-home-route-integrity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  route-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Academy Home canonical routing and shared assets
+        run: node tests/academy-home-route-integrity.test.mjs
