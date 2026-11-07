@@ -25,5 +25,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Check route test syntax
+        run: node --check tests/academy-home-route-integrity.test.mjs
       - name: Validate Academy Home canonical routing and shared assets
         run: node tests/academy-home-route-integrity.test.mjs
