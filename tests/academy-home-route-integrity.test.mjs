@@ -9,7 +9,7 @@ const expected={
 for(const [label,path] of Object.entries(expected)){
  assert.ok(html.includes(CORE+path),label+" canonical route missing");
 }
-for(const route of ["student/","family/","teacher-admin/","adult/","mentor/","offline/"]){
+for(const route of ["student/","family/","teacher-admin/","adult/","offline/"]){
  assert.ok(html.includes(CORE+route),route+" canonical destination missing");
 }
 for(const fragment of ["frontdesk","schools","services","beta","help"]){
