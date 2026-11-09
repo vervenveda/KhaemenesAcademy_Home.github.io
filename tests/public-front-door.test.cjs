@@ -53,3 +53,16 @@ test("no local sign-in or inline network fetch",()=>{
   assert.doesNotMatch(html,/\\b(?:localStorage|sessionStorage|document\\.cookie)\\b/);
   assert.doesNotMatch(html,/\\bfetch\\s*\\(/);
 });
+
+test("ticker scripts precede canonical header mounting",()=>{
+ const t333=html.indexOf('src="https://vervenveda.com/assets/vnv-333-ticker.js"');
+ const auto=html.indexOf('src="https://vervenveda.com/assets/vnv-ticker-autopopulate.js"');
+ const header=html.indexOf('src="https://vervenveda.com/assets/vnv-header-autopopulate.js"');
+ assert.ok(t333>=0&&auto>t333&&header>auto,"ticker/header script order");
+ assert.ok(html.includes('document.addEventListener("DOMContentLoaded",mount,{once:true})'),"header waits for 333 mount");
+ assert.equal((html.match(/VNV_HEADER\\?\.mount\\(/g)||[]).length,0,"avoid unguarded header mount");
+});
+test("hero probe is explicitly opt-in and separate from public account data",()=>{
+ assert.match(html,/assets\\/khaemenes-home-hero-audit\\.js/);
+ assert.match(html,/hero_audit=1/);
+});
