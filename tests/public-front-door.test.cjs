@@ -59,3 +59,8 @@ test("hero diagnostic remains opt-in",()=>{
   assert.ok(importedSources().includes("assets/khaemenes-home-hero-audit.js"));
   assert.ok(html.includes("?hero_audit=1"));
 });
+
+test("Beta feedback action targets published form anchor",()=>{
+  assert.ok(html.includes('href="https://vervenveda.com/beta/#betaForm"'));
+  assert.ok(!html.includes('https://vervenveda.com/beta/#feedback'));
+});
