@@ -64,3 +64,15 @@ test("Beta feedback action targets published form anchor",()=>{
   assert.ok(html.includes('href="https://vervenveda.com/beta/#betaForm"'));
   assert.ok(!html.includes('https://vervenveda.com/beta/#feedback'));
 });
+
+test("Home has no redundant page-wide route MutationObserver",()=>{
+  assert.ok(!html.includes('id="academy-public-home-link-compatibility"'));
+  assert.ok(!html.includes("new MutationObserver(records=>"));
+});
+test("translator action falls back to public Linguistics if selector is absent",()=>{
+  assert.ok(html.includes('data-academy-language-shortcut="true"'));
+  assert.ok(html.includes('href="https://vervenveda.com/Khaemenes_Linguistics.github.io/" data-academy-language-shortcut="true"'));
+  assert.ok(html.includes('document.getElementById("vnv-language-switch")'));
+  assert.ok(html.includes("if(!switcher)return"));
+  assert.ok(html.includes('switcher.scrollIntoView('));
+});
