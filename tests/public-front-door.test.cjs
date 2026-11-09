@@ -76,3 +76,9 @@ test("translator action falls back to public Linguistics if selector is absent",
   assert.ok(html.includes("if(!switcher)return"));
   assert.ok(html.includes('switcher.scrollIntoView('));
 });
+
+test("public faculty doorway is never presented as authenticated administration",()=>{
+  assert.ok(html.includes('>Teacher Resources</a>'));
+  assert.ok(html.includes("Protected administrative actions require separate authorized access."));
+  assert.ok(html.includes('>Open public teacher resources</span>'));
+});
