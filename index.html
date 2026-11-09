@@ -558,6 +558,62 @@ header[data-khae-header] [data-khae-actions] a:focus-visible{
   header[data-khae-header] [data-khae-actions] a{font-size:9px!important;padding:5px 6px!important}
 }
 </style>
+<style id="academy-frontdesk-readable-hero-20261109">
+/* Academy Home readable typography: keep the hero title a single line
+   without constraining learner portal layout or shared network chrome. */
+.hero-inner{width:100%;max-width:1320px;margin-inline:auto;padding:65px 0 90px}
+.hero h1{
+  font-family:var(--display)!important;font-weight:400!important;
+  font-size:clamp(26px,5.55vw,72px)!important;
+  line-height:1.12!important;letter-spacing:-.035em!important;
+  white-space:nowrap!important;text-wrap:nowrap!important;
+  max-width:100%;margin:14px auto 0!important;
+}
+.hero .eyebrow{font-size:18px!important;line-height:1.5!important;letter-spacing:.12em}
+.hero-sub{font-size:16px!important;line-height:1.6!important;letter-spacing:.09em}
+.hero-lead{font-size:18px!important;line-height:1.65!important;max-width:840px}
+.hero-actions{gap:12px;row-gap:12px}
+.hero-actions .btn{white-space:normal;min-height:48px}
+
+/* Minimum readable size for public Home copy, controls and supporting labels.
+   Keep larger headings at their existing scale; avoid affecting injected
+   ecosystem ticker and toolbar implementations. */
+main :is(p,small,a,button,.kicker,.eyebrow),
+footer :is(p,small,a,button),
+.academy-info-dock :is(p,small,a,button),
+.academy-info-dialog :is(p,small,a,button,label),
+header[data-khae-header] :is(a,button,small){
+  font-size:16px!important;
+}
+main :is(input,select,textarea),.academy-info-dialog :is(input,select,textarea){
+  font-size:16px!important;
+}
+/* Readable navigation needs flexible widths rather than clipped labels. */
+header[data-khae-header] [data-khae-nav] a,
+header[data-khae-header] [data-khae-actions] a{
+  font-size:16px!important;min-height:44px!important;
+}
+header[data-khae-header] [data-khae-header-inner]{
+  grid-template-columns:minmax(175px,auto) minmax(0,1fr) minmax(0,auto) 42px!important;
+}
+#schools .school a,#services .service a,.quick a,.btn{font-size:16px!important;min-height:48px}
+#schools .school a{height:auto;max-height:none;flex:0 0 auto;padding:10px}
+@media(max-width:900px){
+  header[data-khae-header] [data-khae-header-inner]{
+    grid-template-columns:minmax(0,1fr) auto 42px!important;
+  }
+}
+@media(max-width:650px){
+  .hero-inner{padding:50px 0 75px}
+  .hero h1{font-size:clamp(24px,5.3vw,36px)!important;letter-spacing:-.045em!important}
+  .hero-lead{font-size:16px!important}
+  .hero .eyebrow{font-size:16px!important}
+  .hero-sub{font-size:16px!important;letter-spacing:.02em}
+  .hero-actions .btn{width:auto;max-width:100%}
+  header[data-khae-header] [data-khae-brand-name]{font-size:16px!important}
+  header[data-khae-header] [data-khae-nav]{justify-content:flex-start!important;overflow-x:auto!important}
+}
+</style>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to main content</a>
