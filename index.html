@@ -867,7 +867,7 @@ footer .footer-left,footer .footer-right{font-size:16px!important}
       <article class="service"><span class="service-mark">R</span><h3>Records & Reports</h3><p>Students enter course records through their school and grade campuses. Families manage connected learner information through the Family Portal.</p><a href="https://vervenveda.com/Khaemenes_Academy.github.io/student/">Student Records →</a></article>
       <article class="service"><span class="service-mark">N</span><h3>NAIB & Mentor Routing</h3><p>NAIB supports readiness and pathway recommendations. Archaemenes supports planning, navigation, study direction, and practical next steps.</p><a href="https://vervenveda.com/Khaemenes_Academy.github.io/student/">Student Support →</a></article>
       <article class="service"><span class="service-mark">β</span><h3>Beta & Improvement</h3><p>Students, families, teachers, and public testers can report confusing pages, broken links, curriculum gaps, accessibility problems, and ideas for improvement.</p><a href="#beta">Join Beta Testing →</a></article>
-      <article class="service"><span class="service-mark" aria-hidden="true">文</span><h3>Language & Translator</h3><p>Choose your preferred interface language, translate available public text, and review translation coverage before studying.</p><a href="#vnv-language-switch">Choose Language →</a></article>
+      <article class="service"><span class="service-mark" aria-hidden="true">文</span><h3>Language & Translator</h3><p>Choose your preferred interface language, translate available public text, and review translation coverage before studying.</p><a href="https://vervenveda.com/Khaemenes_Linguistics.github.io/" data-academy-language-shortcut="true">Choose Language →</a></article>
       <article class="service"><span class="service-mark">?</span><h3>Help & Orientation</h3><p>Not sure where to go? Use the Help Desk below for the most common Academy questions and direct routes.</p><a href="#help">Open Help Desk →</a></article>
     </div>
   </div>
@@ -923,39 +923,26 @@ footer .footer-left,footer .footer-right{font-size:16px!important}
 </footer>
 
 <script>window.__KHAEMENES_EXPLORE_MODE__=new URLSearchParams(location.search).get("explore")==="1";if(window.__KHAEMENES_EXPLORE_MODE__)document.documentElement.dataset.khaemenesExploreMode="public";</script>
-<!-- Public front desk: no family registry, learner selection, grading, or parent-action workflows run on this gateway. -->
-<!-- Public front desk: route dynamically rendered portal links to existing published Academy pages. -->
-<script id="academy-public-home-link-compatibility">
-(()=>{
-  "use strict";
-  const academyRoot="https://vervenveda.com/Khaemenes_Academy.github.io/";
-  const routePattern=/^(?:student|family|adult|mentor|offline|teacher-admin)(?:\/|$)/;
-  function normalize(node){
-    if(!node||node.nodeType!==1)return;
-    const links=node.matches?.("a[href]")?[node]:[];
-    if(node.querySelectorAll)links.push(...node.querySelectorAll("a[href]"));
-    for(const link of links){
-      const raw=link.getAttribute("href");
-      if(!raw||raw.startsWith("#")||raw.startsWith("?"))continue;
-      const route=raw.startsWith("./")?raw.slice(2):raw;
-      if(routePattern.test(route))link.setAttribute("href",academyRoot+route);
-    }
-  }
-  const observe=()=>{
-    normalize(document.documentElement);
-    new MutationObserver(records=>{
-      for(const record of records)for(const node of record.addedNodes)normalize(node);
-    }).observe(document.documentElement,{childList:true,subtree:true});
-  };
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",observe,{once:true});
-  else observe();
-})();
-</script>
+<!-- Public entry links are canonical absolute URLs. Shared VNV scripts own their own dynamic links; no page-wide routing MutationObserver is needed. -->
 <script>
 (()=>{
 "use strict";
 const $=id=>document.getElementById(id);
 document.querySelectorAll('a[href^="https://"]').forEach(a=>a.rel="noopener noreferrer");
+
+/* If the language selector mounted, scroll there. If its dependency failed,
+   preserve this link's ordinary navigation to the public Linguistics campus. */
+document.querySelectorAll("[data-academy-language-shortcut]").forEach(link=>{
+  link.addEventListener("click",event=>{
+    const switcher=document.getElementById("vnv-language-switch");
+    if(!switcher)return;
+    if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+    event.preventDefault();
+    switcher.scrollIntoView({behavior:window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches?"auto":"smooth",block:"center"});
+    const select=switcher.querySelector("select");
+    if(select)select.focus({preventScroll:true});
+  });
+});
 
 document.querySelectorAll("[data-academy-info-open]").forEach(button=>{
   button.addEventListener("click",()=>{
