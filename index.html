@@ -25,6 +25,13 @@
   --line:rgba(20,31,26,.14);--line2:rgba(20,31,26,.24);
   --shadow:0 18px 42px rgba(19,31,25,.08);--shadow2:0 8px 22px rgba(19,31,25,.055);
   --r:7px;--r2:18px;--max:1320px;
+  /* Canonical Academy Home heading scale. Edit these values, not per-card overrides. */
+  --academy-hero-title:clamp(24px,5.3vw,72px);
+  --academy-section-title:clamp(33px,4.3vw,55px);
+  --academy-frontdesk-title:clamp(30px,3.5vw,44px);
+  --academy-feature-title:clamp(32px,3.8vw,48px);
+  --academy-card-title:24px;
+  --academy-help-title:28px;
   --display:"Iowan Old Style","Palatino Linotype",Palatino,Baskerville,Georgia,serif;
   --ceremonial:Cinzel,Aboreto,"Iowan Old Style",Georgia,serif;
   --sans:"Brandon Grotesque","Avenir Next",Avenir,Montserrat,"Segoe UI",Arial,sans-serif;
@@ -123,8 +130,11 @@ header{
 }
 .hero .eyebrow{color:var(--gold2)}
 .hero h1{
-  margin:12px 0 0;font:400 clamp(4.6rem,8vw,7.4rem)/.92 var(--display);
-  letter-spacing:-.03em;text-wrap:balance;
+  margin:14px auto 0;
+  max-width:100%;
+  font:400 var(--academy-hero-title)/1.12 var(--display);
+  letter-spacing:-.035em;
+  white-space:nowrap;text-wrap:nowrap;
 }
 .hero-sub{
   margin-top:16px;color:#ead9b8;font:400 clamp(12px,1.15vw,16px)/1.45 var(--ceremonial);
@@ -156,7 +166,7 @@ header{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,520px);gap:22px;align-items:end;
   padding:8px 8px 20px;text-align:left;
 }
-.desk-head h2{margin:5px 0 0;font:400 clamp(32px,3.6vw,46px)/1.05 var(--display);color:var(--forest)}
+.desk-head h2{margin:5px 0 0;font:400 var(--academy-frontdesk-title)/1.2 var(--display);color:var(--forest)}
 .desk-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.55}
 
 .quick-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
@@ -169,7 +179,7 @@ header{
   width:46px;height:46px;display:grid;place-items:center;border-radius:var(--r);color:#fff;background:var(--accent);
   font:400 13px var(--ceremonial);
 }
-.quick h3{margin:14px 0 7px;font:400 25px/1.1 var(--display);color:#10251d}
+.quick h3{margin:14px 0 7px;font:400 var(--academy-card-title)/1.25 var(--display);color:#10251d}
 .quick p{margin:0 0 14px;color:var(--muted);font-size:11px;line-height:1.6}
 .quick a{
   margin-top:auto;min-height:42px;display:flex;align-items:center;justify-content:center;border-radius:var(--r);
@@ -182,7 +192,7 @@ header{
 .dark{color:#fff;background:linear-gradient(145deg,#102b43,#071521)}
 .forest{color:#fff;background:linear-gradient(145deg,#234437,#0c2118)}
 .heading{max-width:900px;margin:0 auto 34px}
-.heading h2{margin:10px 0 0;font:400 clamp(38px,4.8vw,60px)/1.05 var(--display);text-wrap:balance}
+.heading h2{margin:10px 0 0;font:400 var(--academy-section-title)/1.14 var(--display);text-wrap:balance}
 .heading p{max-width:700px;margin:14px auto 0;color:var(--muted);font-size:13px;line-height:1.62}
 .dark .heading p,.forest .heading p{color:rgba(255,255,255,.67)}
 .dark .kicker,.forest .kicker{color:var(--gold2)}
@@ -209,7 +219,7 @@ header{
   width:38px;height:38px;display:grid;place-items:center;margin:0 auto 12px;border-radius:var(--r);
   color:#fff;background:var(--navy);font:400 11px var(--ceremonial);
 }
-.compass-card h3{margin:0;color:var(--forest);font:400 22px/1.1 var(--display)}
+.compass-card h3{margin:0;color:var(--forest);font:400 var(--academy-card-title)/1.25 var(--display)}
 .compass-card p{margin:9px 0 0;color:var(--muted);font-size:12px;line-height:1.55}
 
 .school-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
@@ -221,7 +231,7 @@ header{
   width:48px;height:48px;display:grid;place-items:center;border-radius:var(--r);color:#fff;background:var(--accent);
   font:400 12px var(--ceremonial)
 }
-.school h3{margin:14px 0 5px;font:400 23px/1.12 var(--display);color:#10251d}
+.school h3{margin:14px 0 5px;font:400 var(--academy-card-title)/1.3 var(--display);color:#10251d}
 .school small{color:var(--gold);font-size:8px;font-weight:400;letter-spacing:.08em;text-transform:uppercase}
 .school p{margin:7px 0 14px;color:var(--muted);font-size:10.5px;line-height:1.58}
 .school a{
@@ -243,7 +253,7 @@ header{
   width:44px;height:44px;display:grid;place-items:center;border-radius:var(--r);color:#fff;background:var(--forest);
   font:400 13px var(--ceremonial)
 }
-.service h3{margin:15px 0 7px;font:400 24px/1.15 var(--display);color:#10251d}
+.service h3{margin:15px 0 7px;font:400 var(--academy-card-title)/1.3 var(--display);color:#10251d}
 .service p{margin:0;color:var(--muted);font-size:11.5px;line-height:1.65}
 .service a{display:inline-flex;margin-top:12px;color:var(--forest);font-size:9px;font-weight:400;letter-spacing:.07em;text-transform:uppercase}
 .dark .service,.forest .service{border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.045);box-shadow:none}
@@ -266,7 +276,7 @@ header{
 #services .service .service-actions>a{margin:0;min-height:48px;height:48px}
 
 .beta-card{max-width:1000px;margin:auto;padding:32px;border:1px solid rgba(255,255,255,.15);border-radius:var(--r2);background:rgba(255,255,255,.05)}
-.beta-card h3{margin:8px 0 0;font:400 clamp(34px,4vw,50px)/1.06 var(--display)}
+.beta-card h3{margin:8px 0 0;font:400 var(--academy-feature-title)/1.14 var(--display)}
 .beta-card p{max-width:740px;margin:13px auto 0;color:rgba(255,255,255,.68);font-size:12px;line-height:1.65}
 .beta-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}
 .beta-card .btn{color:#fff;border-color:rgba(255,255,255,.24)}
@@ -274,7 +284,7 @@ header{
 
 .help-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
 .help{padding:24px;border:1px solid var(--line);border-radius:var(--r2);background:#fff;text-align:left;box-shadow:var(--shadow2)}
-.help h3{margin:0;font:400 28px/1.1 var(--display);color:var(--forest)}
+.help h3{margin:0;font:400 var(--academy-help-title)/1.3 var(--display);color:var(--forest)}
 .help p{color:var(--muted);font-size:11.5px;line-height:1.65}
 .help-list{display:grid;gap:8px;margin-top:14px}
 .help-list a{
@@ -407,7 +417,7 @@ footer{padding:32px 0;color:#fff8e9;background:var(--night);font-size:16px;line-
     font-size:9px;line-height:1.25;letter-spacing:.02em;
   }
   .hero{min-height:520px}.hero-inner{padding:60px 0 96px}
-  .hero h1{font-size:clamp(3.4rem,16vw,4.6rem)}
+  .hero h1{letter-spacing:-.045em}
   .frontdesk{margin-top:-44px}
   .quick-grid,.school-grid,.service-grid,.compass-grid{grid-template-columns:1fr}
   #services .service-grid{grid-template-columns:1fr}
@@ -562,13 +572,6 @@ header[data-khae-header] [data-khae-actions] a:focus-visible{
 /* Academy Home readable typography: keep the hero title a single line
    without constraining learner portal layout or shared network chrome. */
 .hero-inner{width:100%;max-width:1320px;margin-inline:auto;padding:65px 0 90px}
-.hero h1{
-  font-family:var(--display)!important;font-weight:400!important;
-  font-size:clamp(26px,5.55vw,72px)!important;
-  line-height:1.12!important;letter-spacing:-.035em!important;
-  white-space:nowrap!important;text-wrap:nowrap!important;
-  max-width:100%;margin:14px auto 0!important;
-}
 .hero .eyebrow{font-size:18px!important;line-height:1.5!important;letter-spacing:.12em}
 .hero-sub{font-size:16px!important;line-height:1.6!important;letter-spacing:.09em}
 .hero-lead{font-size:18px!important;line-height:1.65!important;max-width:840px}
@@ -605,7 +608,7 @@ header[data-khae-header] [data-khae-header-inner]{
 }
 @media(max-width:650px){
   .hero-inner{padding:50px 0 75px}
-  .hero h1{font-size:clamp(24px,5.3vw,36px)!important;letter-spacing:-.045em!important}
+  .hero h1{letter-spacing:-.045em}
   .hero-lead{font-size:16px!important}
   .hero .eyebrow{font-size:16px!important}
   .hero-sub{font-size:16px!important;letter-spacing:.02em}
@@ -621,7 +624,6 @@ header[data-khae-header] [data-khae-header-inner]{
 #frontdesk .desk-head{
   align-items:center;gap:20px;padding:4px 4px 24px;
 }
-#frontdesk .desk-head h2{line-height:1.2}
 #frontdesk .desk-head p{font-size:16px!important;line-height:1.6;color:#34473c}
 #frontdesk .quick-grid,#academy-compass .compass-grid,
 #schools .school-grid,#services .service-grid{gap:16px}
@@ -632,7 +634,7 @@ header[data-khae-header] [data-khae-header-inner]{
 #frontdesk .quick{
   min-height:280px;padding:22px;align-items:stretch;
 }
-#frontdesk .quick h3{font-size:25px;line-height:1.25;margin:16px 0 10px}
+#frontdesk .quick h3{margin:16px 0 10px}
 #frontdesk .quick p{font-size:16px!important;line-height:1.6;color:#3d4d45;margin:0 0 20px}
 #frontdesk .quick a{font-size:16px!important;line-height:1.35;min-height:52px;padding:12px;text-align:center}
 #frontdesk .quick-icon{font-size:16px;width:48px;height:48px}
@@ -650,7 +652,6 @@ header[data-khae-header] [data-khae-header-inner]{
   display:grid;place-items:center;font-size:16px!important;
   width:48px;height:48px;margin-bottom:16px;
 }
-#academy-compass .compass-card h3{font-size:24px;line-height:1.25}
 #academy-compass .compass-card p{
   font-size:16px!important;line-height:1.6;color:#3d4d45;
 }
@@ -666,7 +667,7 @@ header[data-khae-header] [data-khae-header-inner]{
   margin-top:14px;
 }
 #schools .school h3{
-  margin:8px 0 8px;font-size:24px;line-height:1.3;
+  margin:8px 0 8px;
   overflow-wrap:break-word;
 }
 #schools .school p{
@@ -686,7 +687,7 @@ header[data-khae-header] [data-khae-header-inner]{
 }
 #services .service-mark{width:48px;height:48px;font-size:16px}
 #services .service h3{
-  margin:16px 0 11px;font-size:24px;line-height:1.3;
+  margin:16px 0 11px;
 }
 #services .service p{
   margin:0 0 22px;font-size:16px!important;line-height:1.65;
@@ -705,7 +706,6 @@ header[data-khae-header] [data-khae-header-inner]{
 #beta .beta-card p{font-size:17px!important;line-height:1.7;color:#eae8e0}
 #beta .beta-actions .btn{font-size:16px!important;min-height:52px;padding:12px 18px}
 #help .help{padding:clamp(22px,3vw,32px)}
-#help .help h3{font-size:28px;line-height:1.3}
 #help .help p{font-size:16px!important;line-height:1.7;color:#3d4d45}
 #help .help-list{gap:12px;margin-top:19px}
 #help .help-list a{
