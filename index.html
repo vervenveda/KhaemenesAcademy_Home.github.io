@@ -614,6 +614,139 @@ header[data-khae-header] [data-khae-header-inner]{
   header[data-khae-header] [data-khae-nav]{justify-content:flex-start!important;overflow-x:auto!important}
 }
 </style>
+<style id="academy-frontdesk-section-readability-20261109">
+/* All sections below the Home hero: clear 16px+ supporting copy,
+   spacious symmetrical cards, readable buttons, preserved campus links. */
+#frontdesk .desk{padding:clamp(20px,3vw,33px);border-radius:7px}
+#frontdesk .desk-head{
+  align-items:center;gap:20px;padding:4px 4px 24px;
+}
+#frontdesk .desk-head h2{line-height:1.2}
+#frontdesk .desk-head p{font-size:16px!important;line-height:1.6;color:#34473c}
+#frontdesk .quick-grid,#academy-compass .compass-grid,
+#schools .school-grid,#services .service-grid{gap:16px}
+#frontdesk .quick,#academy-compass .compass-card,
+#schools .school,#services .service,#help .help{
+  border-radius:7px;min-width:0;
+}
+#frontdesk .quick{
+  min-height:280px;padding:22px;align-items:stretch;
+}
+#frontdesk .quick h3{font-size:25px;line-height:1.25;margin:16px 0 10px}
+#frontdesk .quick p{font-size:16px!important;line-height:1.6;color:#3d4d45;margin:0 0 20px}
+#frontdesk .quick a{font-size:16px!important;line-height:1.35;min-height:52px;padding:12px;text-align:center}
+#frontdesk .quick-icon{font-size:16px;width:48px;height:48px}
+
+/* Compass reads as four equal, actionable steps. */
+#academy-compass .heading p,
+#schools .heading p,
+#services .heading p,
+#help .heading p{font-size:17px!important;line-height:1.65}
+#academy-compass .compass-card{
+  display:flex;flex-direction:column;align-items:center;
+  height:100%;min-height:215px;padding:23px 18px;
+}
+#academy-compass .compass-card span{
+  display:grid;place-items:center;font-size:16px!important;
+  width:48px;height:48px;margin-bottom:16px;
+}
+#academy-compass .compass-card h3{font-size:24px;line-height:1.25}
+#academy-compass .compass-card p{
+  font-size:16px!important;line-height:1.6;color:#3d4d45;
+}
+
+/* School directory: readable stage labels, consistent actions and wrapping. */
+#schools .school{
+  min-height:322px;padding:22px 18px;
+}
+#schools .school-mark{font-size:16px;width:48px;height:48px}
+#schools .school small{
+  display:block;font-size:16px!important;letter-spacing:.02em;
+  text-transform:none;color:#67501e;line-height:1.4;
+  margin-top:14px;
+}
+#schools .school h3{
+  margin:8px 0 8px;font-size:24px;line-height:1.3;
+  overflow-wrap:break-word;
+}
+#schools .school p{
+  margin:0 0 19px;font-size:16px!important;line-height:1.6;
+  color:#3d4d45;
+}
+#schools .school a{
+  min-height:52px;height:auto;max-height:none;flex:0 0 auto;
+  padding:12px 9px;font-size:16px!important;line-height:1.35;
+  white-space:normal;overflow-wrap:break-word;
+}
+
+/* Academy service cards: equal columns and action alignment. */
+#services .service{
+  min-height:315px;padding:23px 20px;
+  border:1px solid rgba(234,217,184,.32);
+}
+#services .service-mark{width:48px;height:48px;font-size:16px}
+#services .service h3{
+  margin:16px 0 11px;font-size:24px;line-height:1.3;
+}
+#services .service p{
+  margin:0 0 22px;font-size:16px!important;line-height:1.65;
+  color:#eae8e0;
+}
+#services .service a,#services .service .service-actions>a{
+  width:100%;height:auto;min-height:52px;
+  padding:12px 10px;font-size:16px!important;line-height:1.35;
+  white-space:normal;overflow-wrap:break-word;
+}
+#services .service .service-actions{gap:10px}
+#services .heading p{color:#eae8e0}
+
+/* Beta and Help: comfortable text size and consistent action targets. */
+#beta .beta-card{max-width:1000px;padding:clamp(24px,4vw,44px);border-radius:7px}
+#beta .beta-card p{font-size:17px!important;line-height:1.7;color:#eae8e0}
+#beta .beta-actions .btn{font-size:16px!important;min-height:52px;padding:12px 18px}
+#help .help{padding:clamp(22px,3vw,32px)}
+#help .help h3{font-size:28px;line-height:1.3}
+#help .help p{font-size:16px!important;line-height:1.7;color:#3d4d45}
+#help .help-list{gap:12px;margin-top:19px}
+#help .help-list a{
+  min-height:54px;font-size:16px!important;
+  line-height:1.4;padding:13px;align-items:center;gap:12px;
+}
+#help .help-list a span{font-size:16px!important}
+#help .help .btn{font-size:16px!important;min-height:52px;padding:12px 16px}
+
+/* Footer and short labels are readable, without stretching body sections. */
+footer{font-size:16px;line-height:1.65}
+footer .footer-links a{font-size:16px!important;min-height:44px;padding:6px 9px}
+footer .footer-left,footer .footer-right{font-size:16px!important}
+.section .heading .kicker,.compass-strip .heading .kicker,
+#frontdesk .kicker,#beta .kicker{font-size:16px!important;line-height:1.5}
+
+/* Keep all cards symmetrical while allowing natural text wrapping. */
+@media(max-width:1180px){
+  #schools .school-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #services .service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:820px){
+  #frontdesk .quick-grid,#academy-compass .compass-grid,
+  #schools .school-grid,#services .service-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  #frontdesk .desk-head{grid-template-columns:1fr;text-align:center}
+  #frontdesk .desk-head p{text-align:center}
+}
+@media(max-width:650px){
+  .section{padding:58px 0}
+  #frontdesk .quick-grid,#academy-compass .compass-grid,
+  #schools .school-grid,#services .service-grid{
+    grid-template-columns:minmax(0,1fr);
+  }
+  #frontdesk .quick,#schools .school,#services .service,
+  #academy-compass .compass-card{min-height:0}
+  #help .help-grid{grid-template-columns:minmax(0,1fr)}
+  #beta .beta-actions .btn{width:100%;max-width:none}
+}
+</style>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to main content</a>
