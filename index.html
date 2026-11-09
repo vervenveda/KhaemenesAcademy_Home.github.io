@@ -611,7 +611,7 @@ header[data-khae-header] [data-khae-actions] a:focus-visible{
     <p class="eyebrow">Welcome to the Academy</p>
     <h1>Khaemenes Academy</h1>
     <div class="hero-sub">A Sanctuary for Lifelong Learners</div>
-    <p class="hero-lead">Think of this page as the Academy front desk. Create or resume an account, find the right school or grade, enter student and family portals, reach teacher administration, join the beta program, or simply explore the Academy.</p>
+    <p class="hero-lead">Think of this page as the Academy front desk. Choose the appropriate account portal to create or resume a local profile, find the right school or grade, reach teacher administration, join the beta program, or explore the Academy. Protected Account Cloud sign-in must be verified within its dedicated portal.</p>
     <div class="hero-actions">
       <a class="btn primary" href="#frontdesk">Start at the Front Desk</a>
       <a class="btn gold" href="?explore=1#schools">Explore the Campus</a>
@@ -736,6 +736,7 @@ header[data-khae-header] [data-khae-actions] a:focus-visible{
 </footer>
 
 <script>window.__KHAEMENES_EXPLORE_MODE__=new URLSearchParams(location.search).get("explore")==="1";if(window.__KHAEMENES_EXPLORE_MODE__)document.documentElement.dataset.khaemenesExploreMode="public";</script>
+<!-- Public front desk: no family registry, learner selection, grading, or parent-action workflows run on this gateway. -->
 <!-- Public front desk: route dynamically rendered portal links to existing published Academy pages. -->
 <script id="academy-public-home-link-compatibility">
 (()=>{
@@ -763,12 +764,6 @@ header[data-khae-header] [data-khae-actions] a:focus-visible{
   else observe();
 })();
 </script>
-<script src="https://vervenveda.com/Khaemenes_Academy.github.io/assets/khaemenes-family-registry.js"></script>
-<script src="https://vervenveda.com/Khaemenes_Academy.github.io/assets/khaemenes-learner-context.js"></script>
-<script src="https://vervenveda.com/Khaemenes_Academy.github.io/assets/khaemenes-naib-mentor-router.js"></script>
-<script src="https://vervenveda.com/Khaemenes_Academy.github.io/assets/khaemenes-front-door-router.js"></script>
-<script src="https://vervenveda.com/Khaemenes_Academy.github.io/assets/khaemenes-learning-continuation.js"></script>
-<script src="https://vervenveda.com/Khaemenes_Academy.github.io/assets/khaemenes-parent-action-center.js"></script>
 <script>
 (()=>{
 "use strict";
@@ -798,8 +793,6 @@ document.querySelectorAll(".academy-info-dialog").forEach(dialog=>{
 });
 })();
 </script>
-<script src="https://vervenveda.com/Khaemenes_Academy.github.io/assets/khaemenes-home-personalization.js?v=1.4.1" defer></script>
-<script src="https://vervenveda.com/Khaemenes_Academy.github.io/assets/khaemenes-learning-science.js" defer></script>
 <script src="https://vervenveda.com/Khaemenes_Academy.github.io/assets/khaemenes-account-connection-status.js"></script>
 <script src="https://vervenveda.com/Khaemenes_Academy.github.io/assets/khaemenes-campus-phrases.js" defer></script>
 <script src="https://vervenveda.com/Khaemenes_Academy.github.io/assets/khaemenes-interlingual-core.js" defer></script>
