@@ -59,6 +59,14 @@ const from64=text=>{if(typeof text!=="string"||text.length>Math.ceil(MAX_BYTES*3
 const digest=async bytes=>to64(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes)));
 const derive=async(pass,salt)=>{const material=await crypto.subtle.importKey("raw",encoder.encode(pass),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:ITERATIONS,hash:"SHA-256"},material,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])};
 const filename=name=>String(name||"export").replace(/[\\/\x00-\x1f]/g,"_").slice(0,160)||"export";
+const uniqueFilename=(name,seen)=>{
+ const base=filename(name);let candidate=base,n=2;
+ while(seen.has(candidate.toLocaleLowerCase("en-US"))){
+  const dot=base.lastIndexOf("."),stem=dot>0?base.slice(0,dot):base,ext=dot>0?base.slice(dot):"";
+  const suffix=" ("+n+++ ")";candidate=stem.slice(0,160-suffix.length-ext.length)+suffix+ext;
+ }
+ seen.add(candidate.toLocaleLowerCase("en-US"));return candidate;
+};
 const save=(blob,name)=>{const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000)};
 async function seal(files,password){
  if(!crypto?.subtle||!crypto.getRandomValues)throw Error("Secure browser cryptography is unavailable");
@@ -66,11 +74,13 @@ async function seal(files,password){
  if(files.some(f=>!f||typeof f.arrayBuffer!=="function"||!Number.isFinite(f.size)||f.size<0))throw Error("Invalid input file");
  if(files.reduce((n,f)=>n+f.size,0)>MAX_BYTES)throw Error("Selection exceeds the 20 MiB limit");
  if(typeof password!=="string"||password.length<14)throw Error("A private recovery passphrase of at least 14 characters is required");
- const entries=[];
+ const entries=[],seen=new Set();let actualTotal=0;
  for(const file of files){
+  if(file.size>MAX_BYTES-actualTotal)throw Error("Source files exceed the limit");
   const bytes=new Uint8Array(await file.arrayBuffer());
-  if(bytes.byteLength!==file.size)throw Error("The selected file changed while being read");
-  entries.push({name:filename(file.name),size:bytes.length,sha256:await digest(bytes),bytes:to64(bytes)});
+  actualTotal+=bytes.byteLength;
+  if(actualTotal>MAX_BYTES||bytes.byteLength!==file.size)throw Error("The selected file changed or exceeded the size limit");
+  entries.push({name:uniqueFilename(file.name,seen),size:bytes.length,sha256:await digest(bytes),bytes:to64(bytes)});
  }
  const plain=encoder.encode(JSON.stringify({schema:"khaemenes-source-export-bundle-v1",createdAt:new Date().toISOString(),files:entries}));
  const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
@@ -85,13 +95,18 @@ async function open(envelope,password){
  if(salt.length!==16||iv.length!==12||cipher.length<16||cipher.length>MAX_BYTES*2)throw Error("Invalid encrypted backup");
  const key=await derive(password,salt);
  const plaintext=await crypto.subtle.decrypt({name:"AES-GCM",iv},key,cipher);
+ if(plaintext.byteLength>MAX_BYTES*2)throw Error("Decrypted package exceeds the safety limit");
  const bundle=JSON.parse(decoder.decode(plaintext));
  if(bundle?.schema!=="khaemenes-source-export-bundle-v1"||!Array.isArray(bundle.files)||bundle.files.length<1||bundle.files.length>MAX_FILES)throw Error("Invalid decrypted bundle");
- let total=0;const verified=[];
+ let total=0;const verified=[],seen=new Set();
  for(const entry of bundle.files){
+  if(!entry||typeof entry.name!=="string"||!entry.name.trim()||entry.name.length>160||
+     !Number.isSafeInteger(entry.size)||entry.size<0||entry.size>MAX_BYTES||
+     typeof entry.sha256!=="string"||!/^[A-Za-z0-9+/]{43}=$/.test(entry.sha256))
+     throw Error("Invalid original-file metadata");
   const bytes=from64(entry.bytes);total+=bytes.length;
   if(total>MAX_BYTES||bytes.length!==entry.size||await digest(bytes)!==entry.sha256)throw Error("A source file failed integrity verification");
-  verified.push({name:filename(entry.name),bytes});
+  verified.push({name:uniqueFilename(entry.name,seen),bytes});
  }
  return verified;
 }
@@ -105,7 +120,7 @@ $("encrypt").addEventListener("click",async()=>{
   const archive=await seal(files,pass),verified=await open(archive,pass);
   if(verified.length!==files.length)throw Error("Verification count mismatch");
   save(new Blob([JSON.stringify(archive)],{type:"application/json"}),"academy-record-backup-"+new Date().toISOString().slice(0,10)+".encrypted.json");
-  report("encryptStatus",verified.length+" source files encrypted and verified in memory. Download started; check the saved file and keep a second protected copy.");
+  report("encryptStatus",verified.length+" exported files encrypted and verified in memory. This does NOT prove all course work was exported. Download started. Reopen the saved archive using Step 2, verify each restored file, and keep a second protected copy.");
  }catch(e){report("encryptStatus","Backup not created: "+String(e?.message||e),true)}
  finally{$("sealPassword").value="";$("sealConfirm").value="";button.disabled=false}
 });
@@ -115,7 +130,7 @@ $("decrypt").addEventListener("click",async()=>{
   const file=$("sealedFile").files?.[0];if(!file||file.size>MAX_BYTES*3)throw Error("Select a supported encrypted backup file");
   report("decryptStatus","Verifying encrypted backup locally…");
   const envelope=JSON.parse(await file.text()),verified=await open(envelope,$("openPassword").value);
-  report("decryptStatus","Verified "+verified.length+" original files. No records have been imported or sent to a server.");
+  report("decryptStatus","Verified "+verified.length+" files from this downloaded archive. This does not establish that every course record was exported or that a separate-device restore passed. No records were imported or uploaded.");
   for(const entry of verified){
    const button=document.createElement("button");button.type="button";button.textContent="Download recovered "+entry.name;
    button.addEventListener("click",()=>save(new Blob([entry.bytes],{type:"application/octet-stream"}),entry.name));
