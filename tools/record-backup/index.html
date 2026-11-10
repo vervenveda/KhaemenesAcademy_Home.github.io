@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; font-src 'none'; object-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Academy · Private Record Backup Preparation</title>
+<style>
+:root{color-scheme:light;--ink:#243038;--cream:#fffaf0;--gold:#b08b4c;--muted:#41524e}
+*{box-sizing:border-box}body{margin:0;background:#f5f0e7;color:var(--ink);font:400 16px/1.65 Nunito,"Avenir Next",Arial,sans-serif}
+header,footer{background:#243038;color:#fff8e9;text-align:center;padding:25px 16px}h1,h2{font-family:Cinzel,Georgia,serif;font-weight:400}h1{font-size:clamp(28px,4vw,40px);margin:0 0 8px}h2{font-size:24px}main{max-width:920px;padding:24px 16px 44px;margin:auto}
+.panel{border:1px solid #bca981;border-radius:7px;padding:20px;background:#fffdf8;margin:18px 0}
+p{margin:8px 0 14px}.notice{border-left:3px solid var(--gold);background:#f4ead5;padding:12px}
+label{display:block;margin:12px 0 5px}input[type=file],input[type=password]{width:100%;font:inherit;padding:11px;border:1px solid #8a897e;border-radius:7px;background:#fff;color:#243038}
+button{font:400 16px/1.4 Nunito,"Avenir Next",Arial,sans-serif;background:#243038;color:#fff8e9;padding:12px 18px;border:1px solid #243038;border-radius:7px;cursor:pointer;margin:12px 8px 8px 0;min-height:48px}
+button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+small{font-size:16px}.status{min-height:30px;white-space:pre-wrap}.danger{color:#802222}a{color:inherit}
+</style>
+</head>
+<body>
+<header><h1>Academy Record Backup</h1><p>Local-only encrypted preparation · Not a connected Account Cloud</p></header>
+<main>
+<div class="notice"><strong>Preparation tool — not activated for production.</strong> Select previously exported course or family backup files from the learner's original device. Files stay in this browser while being encrypted. This page does not read localStorage, import records, authenticate learners, or upload anything.</div>
+<section class="panel" aria-labelledby="encryptTitle">
+<h2 id="encryptTitle">1. Protect existing exports</h2>
+<p>Use the original Academy Family Backup and each individual course's export tools first. Select those files below. Do not select unrelated files or other learners' records.</p>
+<label for="originalFiles">Previously exported files (maximum 30 files, 20 MiB combined)</label>
+<input id="originalFiles" type="file" multiple aria-describedby="fileHint">
+<p id="fileHint">Selected files remain unchanged. A single encrypted backup package will be downloaded after integrity verification.</p>
+<label for="sealPassword">Private recovery passphrase (at least 14 characters)</label>
+<input type="password" id="sealPassword" autocomplete="new-password" minlength="14">
+<label for="sealConfirm">Confirm recovery passphrase</label>
+<input type="password" id="sealConfirm" autocomplete="new-password" minlength="14">
+<button id="encrypt" type="button">Encrypt &amp; verify backup</button>
+<p id="encryptStatus" class="status" role="status" aria-live="polite"></p>
+</section>
+<section class="panel" aria-labelledby="restoreTitle">
+<h2 id="restoreTitle">2. Verify or restore an encrypted backup</h2>
+<p>Use this section to verify the protected file can be opened. After unlocking, each source export can be downloaded individually without changing course records.</p>
+<label for="sealedFile">Select encrypted Academy backup</label>
+<input id="sealedFile" type="file" accept=".json,application/json">
+<label for="openPassword">Recovery passphrase</label>
+<input id="openPassword" type="password" autocomplete="off">
+<button id="decrypt" type="button">Verify &amp; open backup</button>
+<p id="decryptStatus" class="status" role="status" aria-live="polite"></p>
+<div id="recovered" aria-live="polite"></div>
+</section>
+<div class="notice"><strong>Preservation rules:</strong> Do not delete originals. Save a second copy of the encrypted file in a separate protected location. Keep the recovery passphrase outside GitHub and separate from the backup. Losing the passphrase means losing access to the backup. A successful download is not proof that Account Cloud storage or a second-device restore has succeeded.</div>
+</main>
+<footer>Khaemenes Academy · Private preparation tool · No cloud connection</footer>
+<script>
+(()=>{"use strict";
+const SCHEMA="khaemenes-local-encrypted-backup-v1", MAX_BYTES=20*1024*1024,MAX_FILES=30,ITERATIONS=310000;
+const $=id=>document.getElementById(id);
+const encoder=new TextEncoder(),decoder=new TextDecoder("utf-8",{fatal:true});
+const to64=bytes=>{let out="";for(let i=0;i<bytes.length;i+=8192)out+=String.fromCharCode(...bytes.subarray(i,i+8192));return btoa(out)};
+const from64=text=>{if(typeof text!=="string"||text.length>Math.ceil(MAX_BYTES*3)||!/^[a-zA-Z0-9+/]*={0,2}$/.test(text))throw Error("Invalid or oversized encoded data");const raw=atob(text),out=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);return out};
+const digest=async bytes=>to64(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes)));
+const derive=async(pass,salt)=>{const material=await crypto.subtle.importKey("raw",encoder.encode(pass),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:ITERATIONS,hash:"SHA-256"},material,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])};
+const filename=name=>String(name||"export").replace(/[\\/\x00-\x1f]/g,"_").slice(0,160)||"export";
+const save=(blob,name)=>{const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000)};
+async function seal(files,password){
+ if(!crypto?.subtle||!crypto.getRandomValues)throw Error("Secure browser cryptography is unavailable");
+ if(!Array.isArray(files)||!files.length||files.length>MAX_FILES)throw Error("Choose 1–30 existing export files");
+ if(files.some(f=>!f||typeof f.arrayBuffer!=="function"||!Number.isFinite(f.size)||f.size<0))throw Error("Invalid input file");
+ if(files.reduce((n,f)=>n+f.size,0)>MAX_BYTES)throw Error("Selection exceeds the 20 MiB limit");
+ if(typeof password!=="string"||password.length<14)throw Error("A private recovery passphrase of at least 14 characters is required");
+ const entries=[];
+ for(const file of files){
+  const bytes=new Uint8Array(await file.arrayBuffer());
+  if(bytes.byteLength!==file.size)throw Error("The selected file changed while being read");
+  entries.push({name:filename(file.name),size:bytes.length,sha256:await digest(bytes),bytes:to64(bytes)});
+ }
+ const plain=encoder.encode(JSON.stringify({schema:"khaemenes-source-export-bundle-v1",createdAt:new Date().toISOString(),files:entries}));
+ const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+ const key=await derive(password,salt);
+ const cipher=new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},key,plain));
+ return {schema:SCHEMA,version:1,algorithm:"AES-256-GCM",kdf:"PBKDF2-SHA-256",iterations:ITERATIONS,salt:to64(salt),iv:to64(iv),ciphertext:to64(cipher)};
+}
+async function open(envelope,password){
+ if(!envelope||envelope.schema!==SCHEMA||envelope.version!==1||envelope.algorithm!=="AES-256-GCM"||envelope.kdf!=="PBKDF2-SHA-256"||envelope.iterations!==ITERATIONS)throw Error("Unsupported encrypted backup format");
+ if(typeof password!=="string"||!password)throw Error("Recovery passphrase is required");
+ const salt=from64(envelope.salt),iv=from64(envelope.iv),cipher=from64(envelope.ciphertext);
+ if(salt.length!==16||iv.length!==12||cipher.length<16||cipher.length>MAX_BYTES*2)throw Error("Invalid encrypted backup");
+ const key=await derive(password,salt);
+ const plaintext=await crypto.subtle.decrypt({name:"AES-GCM",iv},key,cipher);
+ const bundle=JSON.parse(decoder.decode(plaintext));
+ if(bundle?.schema!=="khaemenes-source-export-bundle-v1"||!Array.isArray(bundle.files)||bundle.files.length<1||bundle.files.length>MAX_FILES)throw Error("Invalid decrypted bundle");
+ let total=0;const verified=[];
+ for(const entry of bundle.files){
+  const bytes=from64(entry.bytes);total+=bytes.length;
+  if(total>MAX_BYTES||bytes.length!==entry.size||await digest(bytes)!==entry.sha256)throw Error("A source file failed integrity verification");
+  verified.push({name:filename(entry.name),bytes});
+ }
+ return verified;
+}
+const report=(id,message,error=false)=>{const target=$(id);target.textContent=message;target.classList.toggle("danger",error)};
+$("encrypt").addEventListener("click",async()=>{
+ const button=$("encrypt");button.disabled=true;
+ try{
+  const files=Array.from($("originalFiles").files||[]),pass=$("sealPassword").value;
+  if(pass!==$("sealConfirm").value)throw Error("Passphrases do not match");
+  report("encryptStatus","Encrypting and validating locally…");
+  const archive=await seal(files,pass),verified=await open(archive,pass);
+  if(verified.length!==files.length)throw Error("Verification count mismatch");
+  save(new Blob([JSON.stringify(archive)],{type:"application/json"}),"academy-record-backup-"+new Date().toISOString().slice(0,10)+".encrypted.json");
+  report("encryptStatus",verified.length+" source files encrypted and verified in memory. Download started; check the saved file and keep a second protected copy.");
+ }catch(e){report("encryptStatus","Backup not created: "+String(e?.message||e),true)}
+ finally{$("sealPassword").value="";$("sealConfirm").value="";button.disabled=false}
+});
+$("decrypt").addEventListener("click",async()=>{
+ const button=$("decrypt");button.disabled=true;$("recovered").replaceChildren();
+ try{
+  const file=$("sealedFile").files?.[0];if(!file||file.size>MAX_BYTES*3)throw Error("Select a supported encrypted backup file");
+  report("decryptStatus","Verifying encrypted backup locally…");
+  const envelope=JSON.parse(await file.text()),verified=await open(envelope,$("openPassword").value);
+  report("decryptStatus","Verified "+verified.length+" original files. No records have been imported or sent to a server.");
+  for(const entry of verified){
+   const button=document.createElement("button");button.type="button";button.textContent="Download recovered "+entry.name;
+   button.addEventListener("click",()=>save(new Blob([entry.bytes],{type:"application/octet-stream"}),entry.name));
+   $("recovered").append(button);
+  }
+ }catch(e){report("decryptStatus","Verification failed: "+String(e?.message||e),true)}
+ finally{$("openPassword").value="";button.disabled=false}
+});
+})();
+</script>
+</body></html>
