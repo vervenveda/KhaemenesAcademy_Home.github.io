@@ -86,3 +86,41 @@ test("missing input and mismatched password do not produce an archive",async()=>
  assert.equal(h.downloads.length,0);
  assert.ok(h.element("encryptStatus").textContent.includes("Passphrases do not match"));
 });
+
+test("same-named exports remain independently recoverable",async()=>{
+ const h=harness();
+ h.element("originalFiles").files=[syntheticFile("lesson.json","Course A work"),syntheticFile("lesson.json","Course B work")];
+ h.element("sealPassword").value=h.element("sealConfirm").value="Example-only Recovery 2026!!";
+ await h.element("encrypt").handlers.click();
+ assert.equal(h.downloads.length,1);
+ const blob=h.opened.find(x=>x.ref===h.downloads[0].href).blob;
+ h.element("sealedFile").files=[{size:blob.size,text:()=>blob.text()}];
+ h.element("openPassword").value="Example-only Recovery 2026!!";
+ await h.element("decrypt").handlers.click();
+ const buttons=h.element("recovered").children;
+ assert.equal(buttons.length,2);
+ assert.notEqual(buttons[0].textContent,buttons[1].textContent);
+ buttons.forEach(button=>button.handlers.click());
+ const restored=await Promise.all(h.downloads.slice(1).map(async item=>({
+   name:item.name,contents:await h.opened.find(x=>x.ref===item.href).blob.text()
+ })));
+ assert.deepEqual(restored.map(x=>x.contents),["Course A work","Course B work"]);
+ assert.notEqual(restored[0].name,restored[1].name);
+});
+test("mismatched actual file bytes fail before backup creation",async()=>{
+ const h=harness();
+ const changed={name:"broken.txt",size:1,async arrayBuffer(){return new Uint8Array(12).buffer}};
+ h.element("originalFiles").files=[changed];
+ h.element("sealPassword").value=h.element("sealConfirm").value="Example-only Recovery 2026!!";
+ await h.element("encrypt").handlers.click();
+ assert.equal(h.downloads.length,0);
+ assert.ok(h.element("encryptStatus").textContent.includes("changed or exceeded"));
+});
+test("backup status never claims complete academic coverage or cloud recovery",async()=>{
+ const h=harness();
+ h.element("originalFiles").files=[syntheticFile("partial-export.json","some evidence")];
+ h.element("sealPassword").value=h.element("sealConfirm").value="Example-only Recovery 2026!!";
+ await h.element("encrypt").handlers.click();
+ assert.ok(h.element("encryptStatus").textContent.includes("does NOT prove all course work was exported"));
+ assert.ok(h.element("encryptStatus").textContent.includes("Reopen the saved archive"));
+});
