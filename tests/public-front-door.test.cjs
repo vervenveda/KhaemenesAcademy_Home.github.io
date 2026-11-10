@@ -82,3 +82,20 @@ test("public faculty doorway is never presented as authenticated administration"
   assert.ok(html.includes("Protected administrative actions require separate authorized access."));
   assert.ok(html.includes('>Open public teacher resources</span>'));
 });
+
+test("existing student recovery path warns before creating duplicate records",()=>{
+  assert.ok(html.includes("Preserve an existing student's work before starting a new account."));
+  assert.ok(html.includes("Family backups protect family identity"));
+  assert.ok(html.includes("course grades, assessment attempts, writing drafts, journals, and portfolios"));
+});
+test("public front desk directs to established backup tools without collecting student data",()=>{
+  assert.ok(html.includes('href="https://vervenveda.com/Khaemenes_Academy.github.io/family/#family-records-controls"'));
+  assert.ok(html.includes('>Recover Existing Student</a>'));
+  assert.ok(html.includes("Never upload readable student records to a public repository."));
+  assert.ok(!html.includes('type="file"'));
+});
+test("migration remains unverified and original records remain protected",()=>{
+  assert.ok(html.includes("Account Cloud migration is not active."));
+  assert.ok(html.includes("Keep the original device records unchanged"));
+  assert.ok(html.includes("Account Cloud connection is not verified"));
+});
