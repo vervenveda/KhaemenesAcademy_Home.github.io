@@ -99,3 +99,15 @@ test("migration remains unverified and original records remain protected",()=>{
   assert.ok(html.includes("Keep the original device records unchanged"));
   assert.ok(html.includes("Account Cloud connection is not verified"));
 });
+
+test("family and course backups are explicitly separate",()=>{
+  assert.ok(html.includes("How to preserve an existing learner's records"));
+  assert.ok(html.includes("This protects family identity, not course grades."));
+  assert.ok(html.includes("Export saved work separately from each enrolled course"));
+  assert.ok(html.includes("Some course records may require separate tools or manual export."));
+});
+test("preservation instructions keep original records and secrets out of the public front door",()=>{
+  assert.ok(html.includes("Leave browser records untouched."));
+  assert.ok(html.includes("Do not send unencrypted student records to GitHub or this public page."));
+  assert.ok(html.includes("This checklist does not create an automatic full-record backup."));
+});
