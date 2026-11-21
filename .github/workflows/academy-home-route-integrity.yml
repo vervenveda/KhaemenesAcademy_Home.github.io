@@ -5,11 +5,13 @@ on:
     paths:
       - 'index.html'
       - 'tests/academy-home-route-integrity.test.mjs'
+      - 'tests/academy-home-account-cloud-boundary.test.mjs'
       - '.github/workflows/academy-home-route-integrity.yml'
   pull_request:
     paths:
       - 'index.html'
       - 'tests/academy-home-route-integrity.test.mjs'
+      - 'tests/academy-home-account-cloud-boundary.test.mjs'
       - '.github/workflows/academy-home-route-integrity.yml'
   workflow_dispatch:
 permissions:
@@ -29,3 +31,5 @@ jobs:
         run: node --check tests/academy-home-route-integrity.test.mjs
       - name: Validate Academy Home canonical routing and shared assets
         run: node tests/academy-home-route-integrity.test.mjs
+      - name: Enforce five Academy-only Account Cloud source boundary checks
+        run: node --test tests/academy-home-account-cloud-boundary.test.mjs
